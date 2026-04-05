@@ -56,7 +56,18 @@ unset($_SESSION['survey_submitted']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $not_found ? 'Survey Not Found — Darn Fine Surveys' : $page_title ?></title>
+    <?php if ($not_found): ?>
+    <title>Survey Not Found — Darn Fine Surveys</title>
+    <meta name="description" content="This survey doesn't exist or has already expired.">
+    <meta property="og:title" content="Survey Not Found — Darn Fine Surveys">
+    <meta property="og:description" content="This survey doesn't exist or has already expired.">
+    <?php else: ?>
+    <title>Submit a response to our survey — Darn Fine Surveys</title>
+    <meta name="description" content="<?= htmlspecialchars($survey['title']) ?>">
+    <meta property="og:title" content="Submit a response to our survey — Darn Fine Surveys">
+    <meta property="og:description" content="<?= htmlspecialchars($survey['title']) ?>">
+    <?php endif; ?>
+    <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -218,6 +229,14 @@ unset($_SESSION['survey_submitted']);
         };
     }
 </script>
+
+<footer class="site-footer">
+    Created by <a href="https://darnfinesoftware.com">Darn Fine Software</a> in Ohio
+    <span class="footer-sep">&middot;</span>
+    <a href="https://github.com/Darn-Fine-Software-LLC/surveys">View source</a>
+    <span class="footer-sep">&middot;</span>
+    <a href="mailto:hi@thatalexguy.dev">Contact us</a>
+</footer>
 
 </body>
 </html>

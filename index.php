@@ -2,7 +2,11 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Darn Fine Surveys</title>
+	<title>Darn Fine Surveys — Create a Survey</title>
+	<meta name="description" content="Create a simple, no-bullshit survey in seconds. Share the link, collect responses, results are public. Surveys auto-delete when they expire.">
+	<meta property="og:title" content="Darn Fine Surveys — Create a Survey">
+	<meta property="og:description" content="Create a simple, no-bullshit survey in seconds. Share the link, collect responses, results are public. Surveys auto-delete when they expire.">
+	<meta property="og:type" content="website">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -163,5 +167,14 @@
 			}
 		}
 	</script>
+
+<footer class="site-footer">
+	Created by <a href="https://darnfinesoftware.com">Darn Fine Software</a> in Ohio
+	<span class="footer-sep">&middot;</span>
+	<a href="https://github.com/Darn-Fine-Software-LLC/surveys">View source</a>
+	<span class="footer-sep">&middot;</span>
+	<a href="mailto:hi@thatalexguy.dev">Contact us</a>
+</footer>
+
 </body>
 </html>
