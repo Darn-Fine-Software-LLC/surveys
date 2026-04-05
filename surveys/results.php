@@ -101,7 +101,7 @@ if (!$survey || $survey['expires_at'] < $now) {
 <body>
 
 <header class="site-header">
-    <h1>Surveys Without The Bullshit</h1>
+    <h1>Surveys Without The Bull</h1>
     <p>Couple of clicks, you have a survey. It expires. Results are public — don't ask for anything you'd hide from your neighbor.</p>
     <a href="/" class="btn btn-secondary" style="margin-top: 1rem">Create your own survey!</a>
 </header>

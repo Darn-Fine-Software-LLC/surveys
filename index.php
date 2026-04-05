@@ -1,11 +1,24 @@
+	<?php
+$active_surveys  = 0;
+$total_responses = 0;
+$db_path = __DIR__ . '/database/database.sqlite';
+if (file_exists($db_path)) {
+    try {
+        $db = new PDO('sqlite:' . $db_path);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $active_surveys  = (int)$db->query('SELECT COUNT(*) FROM surveys WHERE expires_at > ' . time())->fetchColumn();
+        $total_responses = (int)$db->query('SELECT COUNT(*) FROM submissions')->fetchColumn();
+    } catch (Exception $e) { /* db not ready yet */ }
+}
+?>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Darn Fine Surveys — Create a Survey</title>
-	<meta name="description" content="Create a simple, no-bullshit survey in seconds. Share the link, collect responses, results are public. Surveys auto-delete when they expire.">
+	<meta name="description" content="Create a simple, no-Bull survey in seconds. Share the link, collect responses, results are public. Surveys auto-delete when they expire.">
 	<meta property="og:title" content="Darn Fine Surveys — Create a Survey">
-	<meta property="og:description" content="Create a simple, no-bullshit survey in seconds. Share the link, collect responses, results are public. Surveys auto-delete when they expire.">
+	<meta property="og:description" content="Create a simple, no-Bull survey in seconds. Share the link, collect responses, results are public. Surveys auto-delete when they expire.">
 	<meta property="og:type" content="website">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,11 +29,22 @@
 <body>
 
 	<header class="site-header">
-		<h1>Surveys Without The Bullshit</h1>
+		<h1>Surveys Without The Bull</h1>
 		<p>Couple of clicks, you have a survey. It expires. Results are public — don't ask for anything you'd hide from your neighbor.</p>
 	</header>
 
 	<main>
+		<div class="stats-row">
+			<div class="stat-card">
+				<span class="stat-number"><?= htmlspecialchars((string)$active_surveys) ?></span>
+				<span class="stat-label">Active Surveys Hapening Now</span>
+			</div>
+			<div class="stat-card">
+				<span class="stat-number"><?= htmlspecialchars((string)$total_responses) ?></span>
+				<span class="stat-label">People Responding to Surveys</span>
+			</div>
+		</div>
+
 		<div class="form-intro">
 			<h2>Create a Survey</h2>
 			<p>Fill in the details below and add your questions. You'll get a shareable link when you're done.</p>
