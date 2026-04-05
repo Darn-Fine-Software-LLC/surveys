@@ -109,6 +109,7 @@ unset($_SESSION['survey_submitted']);
     </div>
 
     <div class="survey-disclaimer">
+        Make sure to copy this link, if you lose it, ya lose it. <br/>
         Results are visible to anyone. Don't submit private or sensitive information.
     </div>
 
