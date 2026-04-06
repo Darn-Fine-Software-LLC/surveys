@@ -22,6 +22,10 @@ if (!$survey || $survey['expires_at'] < $now) {
 } else {
     $not_found = false;
 
+    $stmt = $db->prepare('SELECT COUNT(*) FROM submissions WHERE survey_id = ?');
+    $stmt->execute([$id]);
+    $submission_count = (int)$stmt->fetchColumn();
+
     $stmt = $db->prepare('SELECT * FROM questions WHERE survey_id = ? ORDER BY sort_order');
     $stmt->execute([$id]);
     $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -72,6 +76,9 @@ if (!$survey || $survey['expires_at'] < $now) {
         }
     }
     unset($q);
+
+    require __DIR__ . '/insights.php';
+    $insights = compute_insights($questions, $db, $submission_count, $generators);
 
     $expires_at = (int)$survey['expires_at'];
 }
@@ -134,6 +141,20 @@ if (!$survey || $survey['expires_at'] < $now) {
             <a href="/surveys/json.php?id=<?= htmlspecialchars($id) ?>" class="btn btn-secondary">Download JSON</a>
         </div>
     </div>
+
+    <?php if (!empty($insights)): ?>
+    <div class="insights-section">
+        <span class="insights-label">Darn Fine Insights</span>
+        <?php foreach ($insights as $insight): ?>
+        <div class="insight-card">
+            <svg class="insight-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10.1 4.4 12l.7-4L2.2 5.2l4-.6z" fill="currentColor"/>
+            </svg>
+            <p class="insight-text"><?= htmlspecialchars($insight['text']) ?></p>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
 
     <?php foreach ($questions as $qi => $q): ?>
     <div class="question-block">

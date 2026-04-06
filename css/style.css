@@ -485,6 +485,41 @@
 		}
 		textarea:focus { border-color: var(--accent); }
 
+		/* ── Insights ── */
+		.insights-section {
+			margin-bottom: 1.5rem;
+		}
+		.insights-label {
+			font-family: 'Noto Sans', sans-serif;
+			font-weight: 700;
+			font-size: 0.8rem;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--accent);
+			display: block;
+			margin-bottom: 0.65rem;
+		}
+		.insight-card {
+			background: var(--surface);
+			border: 1.5px solid var(--border);
+			border-left: 3px solid var(--accent);
+			border-radius: var(--radius);
+			padding: 0.85rem 1rem;
+			margin-bottom: 0.5rem;
+			display: flex;
+			align-items: flex-start;
+			gap: 0.7rem;
+		}
+		.insight-icon {
+			color: var(--accent);
+			flex-shrink: 0;
+			margin-top: 0.15rem;
+		}
+		.insight-text {
+			font-size: 0.9rem;
+			line-height: 1.5;
+		}
+
 		/* ── Results page ── */
 		.survey-meta-actions {
 			display: flex;
