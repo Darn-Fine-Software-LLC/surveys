@@ -45,7 +45,7 @@ if (!$survey) {
                 <path d="M4 11.5L8.5 16L18 6.5" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </div>
-        <h1 class="done-heading">Thanks for responding to our survey</h1>
+        <h1 class="done-heading">Nice response!</h1>
         <a href="/surveys/results.php?id=<?= htmlspecialchars($id) ?>" class="btn btn-primary done-btn">
             View Results
         </a>
