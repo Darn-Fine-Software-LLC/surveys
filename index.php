@@ -37,7 +37,7 @@ if (file_exists($db_path)) {
 		<div class="stats-row">
 			<div class="stat-card">
 				<span class="stat-number"><?= htmlspecialchars((string)$active_surveys) ?></span>
-				<span class="stat-label">Active Surveys Hapening Now</span>
+				<span class="stat-label">Surveys Hapening Now</span>
 			</div>
 			<div class="stat-card">
 				<span class="stat-number"><?= htmlspecialchars((string)$total_responses) ?></span>
