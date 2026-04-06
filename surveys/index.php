@@ -123,7 +123,13 @@ unset($_SESSION['survey_submitted']);
         <input type="hidden" name="survey_id" value="<?= htmlspecialchars($id) ?>">
 
         <?php foreach ($questions as $qi => $q): ?>
-        <div class="question-block">
+        <div class="question-block"
+             x-data="{ answered: false, dimmed: false }"
+             x-on:change="answered = true"
+             x-on:input="answered = true"
+             x-on:mouseleave="if (answered) dimmed = true"
+             x-on:mouseenter="dimmed = false"
+             :class="{ 'question-dimmed': dimmed }">
 
             <div class="question-header">
                 <span class="question-number">Question <?= $qi + 1 ?></span>

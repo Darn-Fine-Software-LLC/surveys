@@ -228,6 +228,10 @@
 			border-radius: var(--radius);
 			padding: 1.25rem 1.25rem 1rem;
 			margin-bottom: 0.85rem;
+			transition: opacity 0.4s ease;
+		}
+		.question-block.question-dimmed {
+			opacity: 0.45;
 		}
 		.question-header {
 			display: flex;
