@@ -115,8 +115,12 @@ include __DIR__ . '/../components/header.php';
                 Take Survey
             </a>
             <a href="/surveys/json.php?id=<?= htmlspecialchars($id) ?>" class="btn btn-secondary btn-sm">
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 9V4a1 1 0 011-1h3l2 2h2a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-1H2z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 3h2M2 6h2M2 9h2M6 3h5M6 6h5M6 9h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
                 JSON
+            </a>
+            <a href="/surveys/csv.php?id=<?= htmlspecialchars($id) ?>" class="btn btn-secondary btn-sm">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 3h2M2 6h2M2 9h2M6 3h5M6 6h5M6 9h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                CSV
             </a>
         </div>
     </div>
