@@ -10,13 +10,13 @@
 
 ## Why Darn Fine Surveys?
 
-Most survey tools are bloated, gated behind accounts, or quietly harvesting your data. This one isn't.
+A survey tool that's made to be fast and free.
 
-- **No accounts.** Create a survey and share the link. That's it.
+- **No accounts.** Create a survey and share the link, couldn't be easier!
 - **Auto-expiring.** Surveys self-destruct after 1 day, 1 week, or 1 month. Prevents database from growing too large.
 - **Public results.** Anyone with the link can see responses in real time. Discourages storage of sensitive information.
-- **Zero dependencies.** PHP + SQLite. No Composer, no npm, no Docker.
-- **Genuinely fast.** No framework overhead. Pages load instantly.
+- **Zero dependencies.** PHP + SQLite. No Composer or Docker needed.
+- **Very fast.** No framework overhead or JS mess. Pages load instantly.
 
 ---
 
@@ -26,7 +26,7 @@ Most survey tools are bloated, gated behind accounts, or quietly harvesting your
 |---|---|
 | ![Survey form](screenshots/survey-form.png) | ![Survey results](screenshots/survey-results.png) |
 
-Results include AI-generated insights and an interactive word cloud for open-ended questions. Export to JSON or CSV with one click.
+Results include algorithm generated insights. Export to JSON or CSV with one click.
 
 ---
 
@@ -81,4 +81,4 @@ Add this to a cron job to run nightly.
 
 ---
 
-Built and hosted by [Darn Fine Software](https://surveys.darnfinesoftware.com). If this saved you from signing up for yet another SaaS, consider leaving a ⭐.
+Built and hosted by [Darn Fine Software](https://darnfinesoftware.com). If this saved you from signing up for yet another SaaS, consider leaving a ⭐.
