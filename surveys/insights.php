@@ -42,7 +42,7 @@ function insight_cross_question(array $questions, PDO $db, int $submission_count
             $qb_num = $choice_qs[$j]['num'];
 
             $stmt = $db->prepare(
-                'SELECT a1.value AS va, a2.value AS vb
+                'SELECT a1.submission_id, a1.value AS va, a2.value AS vb
                  FROM answers a1
                  JOIN answers a2 ON a2.submission_id = a1.submission_id
                  WHERE a1.question_id = ? AND a2.question_id = ?'
@@ -50,12 +50,14 @@ function insight_cross_question(array $questions, PDO $db, int $submission_count
             $stmt->execute([$qa['id'], $qb['id']]);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if (count($rows) < 5) continue;
+            // Guard on actual respondent count, not raw JOIN rows (which inflate
+            // for checkbox questions where one submission yields multiple rows).
+            $n_submissions = count(array_unique(array_column($rows, 'submission_id')));
+            if ($n_submissions < 5) continue;
 
             // Count per-submission: how often each (va, vb) co-occurs.
             // For checkbox questions, one submission can contribute multiple values,
             // so we count each (submission, va) and (submission, vb) pair once.
-            $n_submissions = count($rows);
             $count_a       = [];  // submissions where va appears in Q_A
             $count_b       = [];  // submissions where vb appears in Q_B
             $count_ab      = [];  // submissions where both va in Q_A and vb in Q_B
@@ -84,7 +86,7 @@ function insight_cross_question(array $questions, PDO $db, int $submission_count
 
                 foreach (($count_ab[$va] ?? []) as $vb => $n_ab) {
                     $conditional = $n_ab / $n_a;
-                    $baseline    = ($count_b[$vb] ?? 0) / $n_submissions;
+                    $baseline    = ($count_b[$vb] ?? 0) / max(1, $n_submissions);
 
                     // Surface only strong, non-obvious alignments
                     if ($conditional >= 0.80 && $conditional > $baseline + 0.20) {
@@ -187,9 +189,10 @@ function insight_text_terms(array $questions, PDO $db, int $submission_count): a
         if ($best_ngram !== null) {
             $rounded_pct = round($best_count / $total * 100);
             $q_lbl       = $q['label'];
+            $word_count  = substr_count($best_ngram, ' ') + 1;
             $insights[]  = [
                 'text'  => "\"{$best_ngram}\" came up in {$rounded_pct}% of responses to \"{$q_lbl}\".",
-                'score' => $best_count / $total,
+                'score' => ($best_count / $total) * $word_count,
             ];
         }
     }
@@ -198,6 +201,67 @@ function insight_text_terms(array $questions, PDO $db, int $submission_count): a
 }
 
 $generators[] = 'insight_text_terms';
+
+// ── Generator: Dominant choice ───────────────────────────────────────────
+//
+// For each choice question, fires when a single option captures ≥60% of
+// selections. Scored relative to a uniform baseline (pct − 1/N) so a
+// landslide in a many-option question scores higher than the same raw
+// percentage in a two-option question.
+
+function insight_dominant_choice(array $questions, PDO $db, int $submission_count): array
+{
+    $choice_types = ['radio', 'checkbox', 'select'];
+    $insights     = [];
+
+    foreach ($questions as $q) {
+        if (!in_array($q['type'], $choice_types, true)) continue;
+
+        $stmt = $db->prepare(
+            'SELECT a.value FROM answers a
+             JOIN submissions s ON s.id = a.submission_id
+             WHERE a.question_id = ?'
+        );
+        $stmt->execute([$q['id']]);
+        $raw = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($raw) < 5) continue;
+
+        $counts      = [];
+        $total_votes = 0;
+
+        foreach ($raw as $row) {
+            if ($q['type'] === 'checkbox') {
+                foreach (json_decode($row['value'], true) ?? [] as $val) {
+                    $counts[$val] = ($counts[$val] ?? 0) + 1;
+                    $total_votes++;
+                }
+            } else {
+                $counts[$row['value']] = ($counts[$row['value']] ?? 0) + 1;
+                $total_votes++;
+            }
+        }
+
+        if ($total_votes < 1 || count($counts) < 2) continue;
+
+        arsort($counts);
+        $top_label = array_key_first($counts);
+        $top_pct   = $counts[$top_label] / $total_votes;
+
+        if ($top_pct < 0.60) continue;
+
+        $uniform  = 1 / count($counts);
+        $rounded  = round($top_pct * 100);
+        $insights[] = [
+            'text'  => "{$rounded}% of respondents chose \"{$top_label}\" for \"{$q['label']}\" — the clear favorite.",
+            'score' => $top_pct - $uniform,
+        ];
+    }
+
+    return $insights;
+}
+
+$generators[] = 'insight_dominant_choice';
 
 // ── Runner ────────────────────────────────────────────────────────────────
 //
