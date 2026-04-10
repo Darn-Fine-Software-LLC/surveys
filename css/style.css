@@ -354,26 +354,31 @@ main {
     display: flex;
     gap: 1rem;
     overflow-x: auto;
+    overflow-y: visible;
     padding-bottom: 0.75rem;
     scroll-behavior: smooth;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    align-items: stretch;
+    padding: 0.5rem 0;
 }
 .popular-scroll::-webkit-scrollbar {
     display: none;
 }
 
 .popular-card {
-    flex: 0 0 220px;
+    flex: 0 0 260px;
+    width: 260px;
+    min-width: 260px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.25rem;
+    padding: 1.4rem;
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.85rem;
     box-shadow: var(--shadow-sm);
     transition:
         box-shadow 0.2s,
@@ -387,10 +392,23 @@ main {
     border-color: var(--accent-mid);
 }
 
+.popular-card-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.popular-card-date {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--muted-light);
+    text-transform: uppercase;
+}
+
 .popular-card-title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.05rem;
     line-height: 1.35;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -403,23 +421,78 @@ main {
 .popular-card-meta {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     font-size: 0.775rem;
     color: var(--muted);
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-soft);
 }
 
 .popular-meta-item {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.3rem;
 }
 
-.popular-meta-dot {
-    width: 5px;
-    height: 5px;
+.popular-meta-item svg {
+    color: var(--muted-light);
+}
+
+/* ── Explore More Card ── */
+.popular-card-explore {
+    flex: 0 0 260px;
+    width: 260px;
+    min-width: 260px;
+    border-style: dashed;
+    border-color: var(--border);
+    background: transparent;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.popular-card-explore:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateY(-2px);
+}
+
+.explore-icon {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: var(--accent-mid);
-    flex-shrink: 0;
+    background: var(--accent-soft);
+    border: 1.5px dashed var(--accent-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    transition:
+        background 0.2s,
+        border-style 0.2s;
+}
+
+.popular-card-explore:hover .explore-icon {
+    background: var(--accent);
+    border-style: solid;
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.explore-label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+}
+
+.explore-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
 }
 
 /* ── Section Intro ── */

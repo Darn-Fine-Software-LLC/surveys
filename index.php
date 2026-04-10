@@ -11,7 +11,7 @@ if (file_exists($db_path)) {
         $active_surveys  = (int)$db->query('SELECT COUNT(*) FROM surveys WHERE expires_at > ' . time())->fetchColumn();
         $total_responses = (int)$db->query('SELECT COUNT(*) FROM submissions')->fetchColumn();
         $popular_surveys = $db->query('
-            SELECT s.id, s.title,
+            SELECT s.id, s.title, s.created_at,
                    (SELECT COUNT(*) FROM questions q WHERE q.survey_id = s.id) AS question_count,
                    (SELECT COUNT(*) FROM submissions sub WHERE sub.survey_id = s.id) AS response_count
             FROM surveys s
@@ -35,7 +35,7 @@ if (file_exists($db_path)) {
         <div class="hero-actions">
             <a href="#create" class="btn btn-primary btn-lg">Create Your Survey</a>
             <?php if (!empty($popular_surveys)): ?>
-            <a href="#popular" class="btn btn-secondary btn-lg">Browse Surveys</a>
+            <a href="/surveys/browse.php" class="btn btn-secondary btn-lg">Browse Surveys</a>
             <?php endif; ?>
         </div>
     </section>
@@ -67,18 +67,29 @@ if (file_exists($db_path)) {
         <div class="popular-scroll" id="popularScroll">
             <?php foreach ($popular_surveys as $s): ?>
             <a href="/surveys?id=<?= htmlspecialchars($s['id']) ?>" class="popular-card">
+                <div class="popular-card-header">
+                    <span class="popular-card-date"><?= date('M j, Y', (int)$s['created_at']) ?></span>
+                </div>
                 <div class="popular-card-title"><?= htmlspecialchars($s['title']) ?></div>
                 <div class="popular-card-meta">
                     <span class="popular-meta-item">
-                        <span class="popular-meta-dot"></span>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6a4 4 0 1 0 8 0 4 4 0 0 0-8 0z" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="6" r="1" fill="currentColor"/></svg>
                         <?= (int)$s['response_count'] ?> <?= $s['response_count'] == 1 ? 'response' : 'responses' ?>
                     </span>
                     <span class="popular-meta-item">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 3h8M2 6h6M2 9h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
                         <?= (int)$s['question_count'] ?> <?= $s['question_count'] == 1 ? 'question' : 'questions' ?>
                     </span>
                 </div>
             </a>
             <?php endforeach; ?>
+            <a href="/surveys/browse.php" class="popular-card popular-card-explore">
+                <div class="explore-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+                <div class="explore-label">Explore More</div>
+                <div class="explore-sub">View all surveys</div>
+            </a>
         </div>
     </section>
     <?php endif; ?>
@@ -207,7 +218,7 @@ if (file_exists($db_path)) {
 <script>
     function scrollPopular(dir) {
         const el = document.getElementById('popularScroll');
-        if (el) el.scrollBy({ left: dir * 240, behavior: 'smooth' });
+        if (el) el.scrollBy({ left: dir * 280, behavior: 'smooth' });
     }
 
     function surveyBuilder() {

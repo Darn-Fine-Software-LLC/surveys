@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -l index.php)",
+      "Bash(php -l surveys/browse.php)"
+    ]
+  }
+}
