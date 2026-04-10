@@ -153,6 +153,7 @@ h4 {
 }
 
 main {
+    min-height: 100vh;
     max-width: 900px;
     margin: 0 auto;
     padding: 3rem 1.5rem 5rem;

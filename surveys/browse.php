@@ -18,6 +18,7 @@ if (file_exists($db_path)) {
             WHERE s.expires_at > ' .
                     time() .
                     '
+            AND s.show_on_home = 1
             ORDER BY s.created_at DESC
         ',
             )

@@ -1,28 +1,39 @@
 <?php
-$active_surveys  = 0;
+$active_surveys = 0;
 $total_responses = 0;
 $popular_surveys = [];
-$db_path = __DIR__ . '/database/database.sqlite';
+$db_path = __DIR__ . "/database/database.sqlite";
 if (file_exists($db_path)) {
     try {
-        $db = new PDO('sqlite:' . $db_path);
+        $db = new PDO("sqlite:" . $db_path);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        try { $db->exec('ALTER TABLE surveys ADD COLUMN show_on_home INTEGER NOT NULL DEFAULT 0 CHECK(show_on_home IN (0,1))'); } catch (Exception $e) {}
-        $active_surveys  = (int)$db->query('SELECT COUNT(*) FROM surveys WHERE expires_at > ' . time())->fetchColumn();
-        $total_responses = (int)$db->query('SELECT COUNT(*) FROM submissions')->fetchColumn();
-        $popular_surveys = $db->query('
+        $active_surveys = (int) $db
+            ->query("SELECT COUNT(*) FROM surveys WHERE expires_at > " . time())
+            ->fetchColumn();
+        $total_responses = (int) $db
+            ->query("SELECT COUNT(*) FROM submissions")
+            ->fetchColumn();
+        $popular_surveys = $db
+            ->query(
+                '
             SELECT s.id, s.title, s.created_at,
                    (SELECT COUNT(*) FROM questions q WHERE q.survey_id = s.id) AS question_count,
                    (SELECT COUNT(*) FROM submissions sub WHERE sub.survey_id = s.id) AS response_count
             FROM surveys s
-            WHERE s.expires_at > ' . time() . ' AND s.show_on_home = 1
+            WHERE s.expires_at > ' .
+                    time() .
+                    ' AND s.show_on_home = 1
             ORDER BY response_count DESC
             LIMIT 10
-        ')->fetchAll(PDO::FETCH_ASSOC);
-    } catch (Exception $e) { /* db not ready yet */ }
+        ',
+            )
+            ->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        /* db not ready yet */
+    }
 }
 ?>
-<?php include __DIR__ . '/components/header.php'; ?>
+<?php include __DIR__ . "/components/header.php"; ?>
 
 <main>
     <section class="hero">
@@ -42,11 +53,15 @@ if (file_exists($db_path)) {
 
     <div class="stats-row">
         <div class="stat-card">
-            <span class="stat-number"><?= htmlspecialchars((string)$active_surveys) ?></span>
+            <span class="stat-number"><?= htmlspecialchars(
+                (string) $active_surveys,
+            ) ?></span>
             <span class="stat-label">Active Surveys</span>
         </div>
         <div class="stat-card">
-            <span class="stat-number"><?= htmlspecialchars((string)$total_responses) ?></span>
+            <span class="stat-number"><?= htmlspecialchars(
+                (string) $total_responses,
+            ) ?></span>
             <span class="stat-label">Total Responses</span>
         </div>
     </div>
@@ -66,19 +81,34 @@ if (file_exists($db_path)) {
         </div>
         <div class="popular-scroll" id="popularScroll">
             <?php foreach ($popular_surveys as $s): ?>
-            <a href="/surveys?id=<?= htmlspecialchars($s['id']) ?>" class="popular-card">
+            <a href="/surveys?id=<?= htmlspecialchars(
+                $s["id"],
+            ) ?>" class="popular-card">
                 <div class="popular-card-header">
-                    <span class="popular-card-date"><?= date('M j, Y', (int)$s['created_at']) ?></span>
+                    <span class="popular-card-date"><?= date(
+                        "M j, Y",
+                        (int) $s["created_at"],
+                    ) ?></span>
                 </div>
-                <div class="popular-card-title"><?= htmlspecialchars($s['title']) ?></div>
+                <div class="popular-card-title"><?= htmlspecialchars(
+                    $s["title"],
+                ) ?></div>
                 <div class="popular-card-meta">
                     <span class="popular-meta-item">
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6a4 4 0 1 0 8 0 4 4 0 0 0-8 0z" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="6" r="1" fill="currentColor"/></svg>
-                        <?= (int)$s['response_count'] ?> <?= $s['response_count'] == 1 ? 'response' : 'responses' ?>
+                        <?= (int) $s["response_count"] ?> <?= $s[
+     "response_count"
+ ] == 1
+     ? "response"
+     : "responses" ?>
                     </span>
                     <span class="popular-meta-item">
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 3h8M2 6h6M2 9h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-                        <?= (int)$s['question_count'] ?> <?= $s['question_count'] == 1 ? 'question' : 'questions' ?>
+                        <?= (int) $s["question_count"] ?> <?= $s[
+     "question_count"
+ ] == 1
+     ? "question"
+     : "questions" ?>
                     </span>
                 </div>
             </a>
@@ -261,4 +291,4 @@ if (file_exists($db_path)) {
     }
 </script>
 
-<?php include __DIR__ . '/components/footer.php'; ?>
+<?php include __DIR__ . "/components/footer.php"; ?>
